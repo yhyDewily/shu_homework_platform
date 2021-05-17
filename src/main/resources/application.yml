@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: fcb1899
+    url: jdbc:mysql://127.0.0.1:3306/ems?characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT&allowPublicKeyRetrieval=true
+  jpa:
+    show-sql: true
+    open-in-view: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
+server:
+  port: 8080
