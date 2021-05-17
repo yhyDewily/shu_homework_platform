@@ -68,4 +68,25 @@ public class UserController {
     }
 
 
+    @RequestMapping(value = "update_user_info.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse<UserVO> updateInformation(HttpSession session, User user) {
+        UserVO currentUser = (UserVO)session.getAttribute(Const.CURRENT_USER);
+        if(currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        user.setId(currentUser.getId());
+        ServerResponse<UserVO> response = userService.updateInformation(user);
+        if(response.isSuccess()) session.setAttribute(Const.CURRENT_USER, response.getData());
+        return response;
+    }
+
+    @RequestMapping(value = "update_password.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse<String> updatePassword(HttpSession session, String oldPassword, String newPassword) {
+        UserVO currentUser = (UserVO)session.getAttribute(Const.CURRENT_USER);
+        if(currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        return userService.updatePassword(currentUser.getId(), newPassword, oldPassword);
+    }
+
 }

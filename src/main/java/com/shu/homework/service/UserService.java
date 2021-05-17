@@ -19,7 +19,7 @@ public interface UserService {
 
     ServerResponse<UserVO> getByMail(String mail);
 
-    ServerResponse updateInformation(User user);
+    ServerResponse<UserVO> updateInformation(User user);
 
     ServerResponse updatePassword(Long id, String new_password, String old_password);
 }

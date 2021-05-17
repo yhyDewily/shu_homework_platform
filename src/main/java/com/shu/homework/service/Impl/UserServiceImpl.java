@@ -68,7 +68,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ServerResponse updateInformation(User user) {
+    public ServerResponse<UserVO> updateInformation(User user) {
+        int nameCount = repository.checkUsername(user.getName());
+        if(nameCount > 0) return ServerResponse.createByErrorMessage("用户名已存在");
+        int emailCount = repository.checkEmail(user.getMail());
+        if (emailCount > 0) return ServerResponse.createByErrorMessage("email已存在");
         User new_user = repository.findByUserId(user.getId());
         new_user.setName(user.getName());
         new_user.setMail(user.getMail());
@@ -81,8 +85,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ServerResponse updatePassword(Long id, String new_password, String old_password) {
-        return null;
+    public ServerResponse updatePassword(Long id, String newPassword, String oldPassword) {
+        User user = repository.findByUserId(id);
+        int resultCount = repository.checkPassword(MD5Util.MD5EncodeUtf8(oldPassword), id);
+        if(resultCount == 0) return ServerResponse.createByErrorMessage("旧密码错误");
+        user.setPassword(MD5Util.MD5EncodeUtf8(newPassword));
+        try {
+            repository.save(user);
+        } catch (Exception e) {
+            return ServerResponse.createByErrorMessage("修改密码失败");
+        }
+        return ServerResponse.createBySuccessMessage("密码更新成功");
     }
 
     private ServerResponse checkValid(String str, String type) {
