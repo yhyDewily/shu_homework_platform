@@ -15,7 +15,7 @@ public class Course {
     private Long id;
     private String courseId;
     private String courseName;
-    private String majorId;
+    private String major;
     private Long t_id;
     private String stopTime;
     private String intro;

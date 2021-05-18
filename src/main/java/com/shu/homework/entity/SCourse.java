@@ -14,7 +14,8 @@ public class SCourse {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String courseId;
-    private String mail;
+    @Column(name = "studentId")
+    private Long studentId;
     private String status;
 
 }

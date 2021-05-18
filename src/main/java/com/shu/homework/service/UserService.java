@@ -8,6 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface UserService {
 
@@ -22,4 +24,6 @@ public interface UserService {
     ServerResponse<UserVO> updateInformation(User user);
 
     ServerResponse updatePassword(Long id, String new_password, String old_password);
+
+    ServerResponse<List<UserVO>> getAllStudents();
 }

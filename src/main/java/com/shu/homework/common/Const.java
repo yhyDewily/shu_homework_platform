@@ -9,6 +9,7 @@ public class Const {
     public interface Role {
         int ROLE_STUDENT = 0;
         int ROLE_TEACHER = 1;
+        int ROLE_ADMIN = 2;
     }
 
 

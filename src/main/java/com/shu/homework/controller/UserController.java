@@ -12,6 +12,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user/")
@@ -65,6 +66,16 @@ public class UserController {
     @CrossOrigin
     public ServerResponse<UserVO> getUserByMail(String mail) {
         return userService.getByMail(mail);
+    }
+
+    @RequestMapping(value = "get_all_student.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse<List<UserVO>>getAllStudents(HttpSession session) {
+        UserVO currentUser = (UserVO)session.getAttribute(Const.CURRENT_USER);
+        if(currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        if(currentUser.getRole() < 1) return ServerResponse.createByErrorMessage("权限不够");
+        return userService.getAllStudents();
     }
 
 

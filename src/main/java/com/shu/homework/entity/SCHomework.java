@@ -15,7 +15,7 @@ public class SCHomework {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String hwId;
-    private String mail;
+    private Long studentId;
     private String courseId;
     private BigDecimal grade;
     private String status;

@@ -11,6 +11,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -96,6 +99,19 @@ public class UserServiceImpl implements UserService {
             return ServerResponse.createByErrorMessage("修改密码失败");
         }
         return ServerResponse.createBySuccessMessage("密码更新成功");
+    }
+
+    @Override
+    public ServerResponse<List<UserVO>> getAllStudents() {
+        List<User> userList = repository.getAllByRole(0);
+        List<UserVO> studentList = new ArrayList<>();
+        for (User user : userList) {
+            UserVO student = new UserVO(user);
+            student.setPassword(StringUtils.EMPTY);
+            studentList.add(student);
+        }
+        return ServerResponse.createBySuccess(studentList);
+
     }
 
     private ServerResponse checkValid(String str, String type) {
