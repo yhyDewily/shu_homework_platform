@@ -52,28 +52,32 @@ public class ServerResponse<T> {
         return new ServerResponse<T>(ResponseCode.SUCCESS.getCode());
     }
 
+    //返回成功信息
     public static <T> ServerResponse<T> createBySuccessMessage(String msg) {
         return new ServerResponse<T>(ResponseCode.SUCCESS.getCode(), msg);
     }
 
+    //成功返回数据
     public static <T> ServerResponse<T> createBySuccess(T data) {
         return new ServerResponse<T>(ResponseCode.SUCCESS.getCode(), data);
     }
 
+    //成功返回数据和信息
     public static <T> ServerResponse<T> createBySuccess(String msg, T data) {
         return new ServerResponse<T>(ResponseCode.SUCCESS.getCode(), msg, data);
     }
 
-
+    //错误返回
     public static <T> ServerResponse<T> createByError() {
         return new ServerResponse<T>(ResponseCode.ERROR.getCode(), ResponseCode.ERROR.getDesc());
     }
 
-
+    //错误返回的信息
     public static <T> ServerResponse<T> createByErrorMessage(String errorMessage) {
         return new ServerResponse<T>(ResponseCode.ERROR.getCode(), errorMessage);
     }
 
+    //错误返回的代码和信息
     public static <T> ServerResponse<T> createByErrorCodeMessage(int errorCode, String errorMessage) {
         return new ServerResponse<T>(errorCode, errorMessage);
     }
