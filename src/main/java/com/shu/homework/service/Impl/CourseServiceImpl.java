@@ -66,5 +66,28 @@ public class CourseServiceImpl implements CourseService {
         return ServerResponse.createBySuccess(pageCourse);
     }
 
+    @Override
+    public ServerResponse UpdateCourse(Course new_course) {
+        Course course = courseRepository.findByCourseId(new_course.getCourseId());
+        if(course == null) {
+            return ServerResponse.createByErrorMessage("课程不存在");
+        }
+        course.setStopTime(new_course.getStopTime());
+        course.setIntro(new_course.getIntro());
+        course.setMajor(new_course.getMajor());
+        course.setCourseName(new_course.getCourseName());
+        try {
+            courseRepository.save(course);
+        } catch (Exception e) {
+            return ServerResponse.createByErrorMessage("课程信息修改失败");
+        }
+        return ServerResponse.createBySuccessMessage("课程修改成功");
+    }
+
+    public boolean checkAuth(Long teacherId, String courseId){
+        Course course = courseRepository.findByCourseId(courseId);
+        return teacherId.equals(course.getT_id());
+    }
+
 
 }

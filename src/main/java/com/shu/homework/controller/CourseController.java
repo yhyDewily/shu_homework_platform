@@ -2,12 +2,12 @@ package com.shu.homework.controller;
 
 import com.shu.homework.common.Const;
 import com.shu.homework.common.ServerResponse;
+import com.shu.homework.entity.Course;
 import com.shu.homework.entity.User;
 import com.shu.homework.service.Impl.CourseServiceImpl;
 import com.shu.homework.service.Impl.UserServiceImpl;
 import com.shu.homework.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +33,7 @@ public class CourseController {
         return courseService.addStuCourse(user.getId(), courseId);
     }
 
-    @RequestMapping(value = "get_student_course", method = RequestMethod.POST)
+    @RequestMapping(value = "get_student_course.do", method = RequestMethod.POST)
     @ResponseBody
     @CrossOrigin
     public ServerResponse getStuCourse(HttpSession session, @RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
@@ -41,6 +41,20 @@ public class CourseController {
         UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
         if(currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
         return courseService.getStuCourse(currentUser.getId(), pageNum-1, pageSize);
+    }
+
+    @RequestMapping(value = "save.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse courseSave(HttpSession session, Course course) {
+        UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        if (currentUser.getRole() < 1) return ServerResponse.createByErrorMessage("没有更改权限");
+        if(courseService.checkAuth(currentUser.getId(), course.getCourseId())){
+            return courseService.UpdateCourse(course);
+        } else {
+            return ServerResponse.createByErrorMessage("非该课程老师，没有操作权限");
+        }
     }
 
 }
