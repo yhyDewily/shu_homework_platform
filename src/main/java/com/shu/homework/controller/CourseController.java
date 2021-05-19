@@ -8,6 +8,7 @@ import com.shu.homework.service.Impl.CourseServiceImpl;
 import com.shu.homework.service.Impl.UserServiceImpl;
 import com.shu.homework.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,15 @@ public class CourseController {
     @Autowired
     UserServiceImpl userService;
 
-    @RequestMapping(value = "addStuCourse.do", method = RequestMethod.POST)
+    @RequestMapping(value = "get_all.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse getAll(@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+                                 @RequestParam(value = "pageSize", defaultValue = "15")int pageSize){
+        return courseService.getAllCourseByPage(pageNum-1, pageSize);
+    }
+
+    @RequestMapping(value = "add_stu_course.do", method = RequestMethod.POST)
     @ResponseBody
     @CrossOrigin
     public ServerResponse addStuCourse(HttpSession session, User user, String courseId){

@@ -84,6 +84,13 @@ public class CourseServiceImpl implements CourseService {
         return ServerResponse.createBySuccessMessage("课程修改成功");
     }
 
+    @Override
+    public ServerResponse getAllCourseByPage(int pageNum, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        Page<Course> courses = courseRepository.findAllByPage(pageable);
+        return ServerResponse.createBySuccess(courses);
+    }
+
     public boolean checkAuth(Long teacherId, String courseId){
         Course course = courseRepository.findByCourseId(courseId);
         return teacherId.equals(course.getT_id());

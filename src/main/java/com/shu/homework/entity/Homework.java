@@ -14,7 +14,7 @@ public class Homework {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String courseId;
-    private String hwId;
+    private Long studentId;
     private String hwName;
     private String hwIntro;
 }

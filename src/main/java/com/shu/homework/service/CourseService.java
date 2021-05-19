@@ -11,4 +11,6 @@ public interface CourseService {
     ServerResponse getStuCourse(Long studentId, int pageNum, int pageSize);
 
     ServerResponse UpdateCourse(Course course);
+
+    ServerResponse getAllCourseByPage(int pageNum, int pageSize);
 }
