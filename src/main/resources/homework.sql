@@ -31,7 +31,7 @@ CREATE TABLE `course` (
   `stopTime` date NOT NULL,
   `intro` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
-INSERT INTO `course` VALUES (1,'00001','数据结构','计算机',3,'2021-06-30',NULL),(2,'00002','计算机组成原理','计算机',3,'2021-06-30',NULL),(3,'00003','离散数学','计算机',5,'2021-06-30',NULL),(4,'00004','编译原理','计算机',8,'2021-06-30',NULL);
+INSERT INTO `course` VALUES (1,'00001','数据结构','计算机学院',3,'2021-06-30',NULL),(2,'00002','计算机组成原理','计算机学院',3,'2021-06-30',NULL),(3,'00003','离散数学','计算机学院',5,'2021-06-30',NULL),(4,'00004','编译原理','计算机学院',8,'2021-06-30',NULL),(5,'00005','概率论','理学院',6,'2021-11-30',NULL);
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -83,7 +83,7 @@ DROP TABLE IF EXISTS `homework`;
 CREATE TABLE `homework` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `course_id` char(5) NOT NULL,
-  `hw_id` int NOT NULL,
+  `studentId` bigint NOT NULL,
   `hw_name` varchar(40) NOT NULL,
   `hw_intro` text NOT NULL,
   PRIMARY KEY (`id`)
@@ -110,7 +110,7 @@ DROP TABLE IF EXISTS `schomework`;
 CREATE TABLE `schomework` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `hw_id` char(5) NOT NULL,
-  `mail` varchar(60) NOT NULL,
+  `student_id` bigint NOT NULL,
   `course_id` char(5) NOT NULL,
   `grade` decimal(5,2) NOT NULL,
   PRIMARY KEY (`id`)
@@ -123,7 +123,6 @@ CREATE TABLE `schomework` (
 
 LOCK TABLES `schomework` WRITE;
 /*!40000 ALTER TABLE `schomework` DISABLE KEYS */;
-INSERT INTO `schomework` VALUES (1,'1','xxx@xxx.com','00001',99.90);
 /*!40000 ALTER TABLE `schomework` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -138,9 +137,9 @@ CREATE TABLE `scourse` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `courseId` char(5) NOT NULL,
   `studentId` bigint NOT NULL,
-  `status` char(3) NOT NULL,
+  `status` char(3) NOT NULL DEFAULT 'no',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -149,7 +148,7 @@ CREATE TABLE `scourse` (
 
 LOCK TABLES `scourse` WRITE;
 /*!40000 ALTER TABLE `scourse` DISABLE KEYS */;
-INSERT INTO `scourse` VALUES (1,'00001',1,'no'),(2,'00001',2,'no');
+INSERT INTO `scourse` VALUES (1,'00001',1,'no'),(2,'00001',2,'no'),(3,'00002',1,'no'),(4,'00003',1,'no'),(6,'00004',1,'no');
 /*!40000 ALTER TABLE `scourse` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -189,4 +188,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-18 18:05:25
+-- Dump completed on 2021-05-19 13:32:34
