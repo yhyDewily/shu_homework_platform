@@ -13,4 +13,8 @@ public interface CourseService {
     ServerResponse UpdateCourse(Course course);
 
     ServerResponse getAllCourseByPage(int pageNum, int pageSize);
+
+    ServerResponse searchByName(String keyword, int pageNum, int pageSize);
+
+    ServerResponse getCourseInfo(String courseName);
 }

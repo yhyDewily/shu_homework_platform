@@ -32,6 +32,13 @@ public class CourseController {
         return courseService.getAllCourseByPage(pageNum-1, pageSize);
     }
 
+    @RequestMapping(value = "get_course_info.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse getCourseInfo(String courseName) {
+        return courseService.getCourseInfo(courseName);
+    }
+
     @RequestMapping(value = "add_stu_course.do", method = RequestMethod.POST)
     @ResponseBody
     @CrossOrigin
@@ -64,6 +71,14 @@ public class CourseController {
         } else {
             return ServerResponse.createByErrorMessage("非该课程老师，没有操作权限");
         }
+    }
+
+    @RequestMapping(value = "search_by_name.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse searchByName(String keyword, @RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+                                       @RequestParam(value = "pageSize", defaultValue = "15")int pageSize) {
+        return courseService.searchByName(keyword, pageNum, pageSize);
     }
 
 }

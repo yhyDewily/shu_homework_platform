@@ -10,9 +10,14 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     Course findByCourseId(String courseId);
 
+    Course findByCourseName(String courseName);
+
     @Query(value = "select count(1) from ems.course where courseId =?1", nativeQuery = true)
     int checkCourseId(String courseId);
 
     @Query(value = "select * from ems.course", nativeQuery = true)
     Page<Course> findAllByPage(Pageable pageable);
+
+    @Query(value = "select * from ems.course where courseName regexp'?1'", nativeQuery = true)
+    Page<Course> searchByCourseName(String keyWord, Pageable pageable);
 }

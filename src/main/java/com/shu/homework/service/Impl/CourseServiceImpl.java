@@ -91,6 +91,20 @@ public class CourseServiceImpl implements CourseService {
         return ServerResponse.createBySuccess(courses);
     }
 
+    @Override
+    public ServerResponse searchByName(String keyword, int pageNum, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        Page<Course> courses = courseRepository.searchByCourseName(keyword, pageable);
+        return ServerResponse.createBySuccess(courses);
+    }
+
+    @Override
+    public ServerResponse getCourseInfo(String courseName) {
+        Course course = courseRepository.findByCourseName(courseName);
+        if(course == null) return ServerResponse.createByErrorMessage("课程不存在");
+        return ServerResponse.createBySuccess(course);
+    }
+
     public boolean checkAuth(Long teacherId, String courseId){
         Course course = courseRepository.findByCourseId(courseId);
         return teacherId.equals(course.getT_id());
