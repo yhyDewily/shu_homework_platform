@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Data
 @Entity
-@Table(name = "group")
+@Table(name = "student_group")
 public class Group implements Serializable {
 
     @Id
