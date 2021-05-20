@@ -10,6 +10,8 @@ import com.shu.homework.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -21,15 +23,15 @@ public class UserController {
     @Autowired
     UserServiceImpl userService;
 
-
-
     @RequestMapping(value = "login.do", method = RequestMethod.POST)
     @ResponseBody
     @CrossOrigin
-    public ServerResponse<UserVO> login(String username, String password, HttpSession session){
-        ServerResponse<UserVO> response = userService.login(username, password);
+    public ServerResponse<UserVO> login(String email, String password, HttpServletRequest servlet){
+        ServerResponse<UserVO> response = userService.login(email, password);
+        HttpSession session = servlet.getSession();
         if(response.isSuccess()) {
             session.setAttribute(Const.CURRENT_USER, response.getData());
+            System.out.println(session.getId());
         }
         return response;
     }
@@ -45,6 +47,7 @@ public class UserController {
     @ResponseBody
     @CrossOrigin
     public ServerResponse<String> logout(HttpSession session) {
+        System.out.println(session.getId());
         session.removeAttribute(Const.CURRENT_USER);
         return ServerResponse.createBySuccess();
     }
@@ -53,7 +56,9 @@ public class UserController {
     @RequestMapping(value = "get_user_info.do", method = RequestMethod.POST)
     @ResponseBody
     @CrossOrigin
-    public ServerResponse<UserVO> getUserInfo(HttpSession session) {
+    public ServerResponse<UserVO> getUserInfo(HttpServletRequest servlet) {
+        HttpSession session = servlet.getSession();
+        System.out.println(session.getId());
         UserVO currentUserVO = (UserVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUserVO == null) {
            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，需要强制登录");

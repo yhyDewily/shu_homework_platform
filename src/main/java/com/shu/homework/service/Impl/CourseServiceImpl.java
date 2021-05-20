@@ -7,6 +7,7 @@ import com.shu.homework.respository.CourseRepository;
 import com.shu.homework.respository.SCourseRepository;
 import com.shu.homework.respository.UserRepository;
 import com.shu.homework.service.CourseService;
+import com.shu.homework.vo.SCourseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -56,13 +57,22 @@ public class CourseServiceImpl implements CourseService {
         Pageable pageable = PageRequest.of(pageNum,pageSize);
         Page<SCourse> sCoursePage = sCourseRepository.findByStudentId(studentId, pageable);
         List<SCourse> sCourseList = sCoursePage.getContent();
-        List<Course> courseList = new ArrayList<>();
+        List<SCourseVO> courseList = new ArrayList<>();
         for(SCourse sCourse : sCourseList) {
+            SCourseVO sCourseVO = new SCourseVO();
+            //查找课程
             Course course = courseRepository.findByCourseId(sCourse.getCourseId());
-            courseList.add(course);
+            sCourseVO.setCourseId(course.getCourseId());
+            sCourseVO.setCourseName(course.getCourseName());
+            //获取老师姓名
+            String teacherName = userRepository.findByUserId(course.getT_id()).getName();
+            sCourseVO.setTeacher(teacherName);
+            sCourseVO.setMajor(course.getMajor());
+            sCourseVO.setStopTime(course.getStopTime());
+            courseList.add(sCourseVO);
         }
         //获取学生所有课程后返回
-        Page<Course> pageCourse = new PageImpl<Course>(courseList,pageable,sCoursePage.getTotalElements());
+        Page<SCourseVO> pageCourse = new PageImpl<SCourseVO>(courseList,pageable,sCoursePage.getTotalElements());
         return ServerResponse.createBySuccess(pageCourse);
     }
 
@@ -103,6 +113,20 @@ public class CourseServiceImpl implements CourseService {
         Course course = courseRepository.findByCourseName(courseName);
         if(course == null) return ServerResponse.createByErrorMessage("课程不存在");
         return ServerResponse.createBySuccess(course);
+    }
+
+    @Override
+    public ServerResponse getCourseInfoById(String courseId) {
+        Course course = courseRepository.findByCourseId(courseId);
+        if(course == null) return ServerResponse.createByErrorMessage("课程不存在");
+        String teacher = userRepository.findByUserId(course.getT_id()).getName();
+        SCourseVO sCourseVO = new SCourseVO();
+        sCourseVO.setCourseId(courseId);
+        sCourseVO.setCourseName(course.getCourseName());
+        sCourseVO.setMajor(course.getMajor());
+        sCourseVO.setStopTime(course.getStopTime());
+        sCourseVO.setTeacher(teacher);
+        return ServerResponse.createBySuccess(sCourseVO);
     }
 
     public boolean checkAuth(Long teacherId, String courseId){

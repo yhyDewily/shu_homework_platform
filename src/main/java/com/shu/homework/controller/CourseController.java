@@ -28,7 +28,7 @@ public class CourseController {
     @ResponseBody
     @CrossOrigin
     public ServerResponse getAll(@RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
-                                 @RequestParam(value = "pageSize", defaultValue = "15")int pageSize){
+                                 @RequestParam(value = "pageSize", defaultValue = "5")int pageSize){
         return courseService.getAllCourseByPage(pageNum-1, pageSize);
     }
 
@@ -38,6 +38,14 @@ public class CourseController {
     public ServerResponse getCourseInfo(String courseName) {
         return courseService.getCourseInfo(courseName);
     }
+
+    @RequestMapping(value = "get_course_info_by_id.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse getCourseInfoById(String courseId) {
+        return courseService.getCourseInfoById(courseId);
+    }
+
 
     @RequestMapping(value = "add_stu_course.do", method = RequestMethod.POST)
     @ResponseBody
@@ -53,7 +61,7 @@ public class CourseController {
     @ResponseBody
     @CrossOrigin
     public ServerResponse getStuCourse(HttpSession session, @RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
-                                       @RequestParam(value = "pageSize", defaultValue = "15")int pageSize) {
+                                       @RequestParam(value = "pageSize", defaultValue = "5")int pageSize) {
         UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
         if(currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
         return courseService.getStuCourse(currentUser.getId(), pageNum-1, pageSize);
@@ -77,7 +85,7 @@ public class CourseController {
     @ResponseBody
     @CrossOrigin
     public ServerResponse searchByName(String keyword, @RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
-                                       @RequestParam(value = "pageSize", defaultValue = "15")int pageSize) {
+                                       @RequestParam(value = "pageSize", defaultValue = "5")int pageSize) {
         return courseService.searchByName(keyword, pageNum, pageSize);
     }
 

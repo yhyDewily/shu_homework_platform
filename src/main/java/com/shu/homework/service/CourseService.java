@@ -17,4 +17,6 @@ public interface CourseService {
     ServerResponse searchByName(String keyword, int pageNum, int pageSize);
 
     ServerResponse getCourseInfo(String courseName);
+
+    ServerResponse getCourseInfoById(String courseId);
 }

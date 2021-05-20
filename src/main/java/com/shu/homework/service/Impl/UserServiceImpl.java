@@ -21,11 +21,11 @@ public class UserServiceImpl implements UserService {
     UserRepository repository;
 
     @Override
-    public ServerResponse<UserVO> login(String username, String password) {
-        int resultCount = repository.checkUsername(username);
-        if (resultCount == 0) return ServerResponse.createByErrorMessage("用户名不存在");
+    public ServerResponse<UserVO> login(String email, String password) {
+        int resultCount = repository.checkEmail(email);
+        if (resultCount == 0) return ServerResponse.createByErrorMessage("邮箱不存在");
         String md5Password = MD5Util.MD5EncodeUtf8(password);
-        User user = repository.findByNameAndPassword(username, md5Password);
+        User user = repository.findByMailAndPassword(email, md5Password);
 
         if (user == null) {
             return ServerResponse.createByErrorMessage("密码错误");

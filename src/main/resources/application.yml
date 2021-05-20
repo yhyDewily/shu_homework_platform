@@ -2,7 +2,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: fcbarca1899
+    password: fcb1899
     url: jdbc:mysql://127.0.0.1:3306/ems?characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT&allowPublicKeyRetrieval=true
   jpa:
     show-sql: true
@@ -21,4 +21,4 @@ spring:
       max-request-size: 20MB
       max-file-size: 20MB
 server:
-  port: 8080
+  port: 8085
