@@ -3,6 +3,7 @@ package com.shu.homework.service.Impl;
 import com.shu.homework.common.ServerResponse;
 import com.shu.homework.entity.Course;
 import com.shu.homework.entity.SCourse;
+import com.shu.homework.entity.User;
 import com.shu.homework.respository.CourseRepository;
 import com.shu.homework.respository.SCourseRepository;
 import com.shu.homework.respository.UserRepository;
@@ -62,13 +63,7 @@ public class CourseServiceImpl implements CourseService {
             CourseVO courseVO = new CourseVO();
             //查找课程
             Course course = courseRepository.findByCourseId(sCourse.getCourseId());
-            courseVO.setCourseId(course.getCourseId());
-            courseVO.setCourseName(course.getCourseName());
-            //获取老师姓名
-            String teacherName = userRepository.findByUserId(course.getT_id()).getName();
-            courseVO.setTeacher(teacherName);
-            courseVO.setMajor(course.getMajor());
-            courseVO.setStopTime(course.getStopTime());
+            courseVO = setCourseVO(course);
             courseList.add(courseVO);
         }
         //获取学生所有课程后返回
@@ -101,16 +96,7 @@ public class CourseServiceImpl implements CourseService {
         List<Course> coursesContent = courses.getContent();
         List<CourseVO> courseList = new ArrayList<>();
         for(Course course_it : coursesContent) {
-            CourseVO courseVO = new CourseVO();
-            //查找课程
-            Course course = courseRepository.findByCourseId(course_it.getCourseId());
-            courseVO.setCourseId(course.getCourseId());
-            courseVO.setCourseName(course.getCourseName());
-            //获取老师姓名
-            String teacherName = userRepository.findByUserId(course.getT_id()).getName();
-            courseVO.setTeacher(teacherName);
-            courseVO.setMajor(course.getMajor());
-            courseVO.setStopTime(course.getStopTime());
+            CourseVO courseVO = setCourseVO(course_it);
             courseList.add(courseVO);
         }
         //获取学生所有课程后返回
@@ -119,10 +105,33 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public ServerResponse searchByName(String keyword, int pageNum, int pageSize) {
+    public ServerResponse searchCourse(Long userId, String keyword,int action,int tab, int pageNum, int pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
-        Page<Course> courses = courseRepository.searchByCourseName(keyword, pageable);
-        return ServerResponse.createBySuccess(courses);
+        Page<Course> courses;
+        if(tab == 0) {
+            if (action == 1) {
+                courses = courseRepository.searchSelectByCourseName(userId, keyword, pageable);
+            } else {
+                courses = courseRepository.searchSelectByCourseId(userId, keyword, pageable);
+            }
+
+        } else {
+            if (action == 1) {
+                courses = courseRepository.searchUnSelectByCourseName(userId, keyword, pageable);
+            } else {
+                courses = courseRepository.searchUnselectByCourseId(userId, keyword, pageable);
+            }
+        }
+        List<Course> coursesContent = courses.getContent();
+        List<CourseVO> courseList = new ArrayList<>();
+        for(Course course_it : coursesContent) {
+            CourseVO courseVO = setCourseVO(course_it);
+            courseList.add(courseVO);
+        }
+        //获取学生所有课程后返回
+        Page<CourseVO> pageCourse = new PageImpl<CourseVO>(courseList,pageable,courses.getTotalElements());
+        return ServerResponse.createBySuccess(pageCourse);
+
     }
 
     @Override
@@ -143,12 +152,43 @@ public class CourseServiceImpl implements CourseService {
         courseVO.setMajor(course.getMajor());
         courseVO.setStopTime(course.getStopTime());
         courseVO.setTeacher(teacher);
+        courseVO.setIntro(course.getIntro());
         return ServerResponse.createBySuccess(courseVO);
+    }
+
+    @Override
+    public ServerResponse getUnchosenCourse(Long studentId, int pageNum, int pageSize) {
+        User user = userRepository.findByUserId(studentId);
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        Page<Course> courses = courseRepository.findUnselectCourseById(studentId, pageable);
+        List<Course> coursesContent = courses.getContent();
+        List<CourseVO> courseList = new ArrayList<>();
+        for(Course course_it : coursesContent) {
+            CourseVO courseVO = setCourseVO(course_it);
+            courseList.add(courseVO);
+        }
+        //获取学生所有课程后返回
+        Page<CourseVO> pageCourse = new PageImpl<CourseVO>(courseList,pageable,courses.getTotalElements());
+        return ServerResponse.createBySuccess(pageCourse);
     }
 
     public boolean checkAuth(Long teacherId, String courseId){
         Course course = courseRepository.findByCourseId(courseId);
         return teacherId.equals(course.getT_id());
+    }
+
+    public CourseVO setCourseVO (Course course) {
+        CourseVO courseVO = new CourseVO();
+        //查找课程
+        courseVO.setCourseId(course.getCourseId());
+        courseVO.setCourseName(course.getCourseName());
+        //获取老师姓名
+        String teacherName = userRepository.findByUserId(course.getT_id()).getName();
+        courseVO.setTeacher(teacherName);
+        courseVO.setMajor(course.getMajor());
+        courseVO.setStopTime(course.getStopTime());
+        courseVO.setIntro(course.getIntro());
+        return courseVO;
     }
 
 

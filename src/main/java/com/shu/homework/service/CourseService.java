@@ -14,9 +14,11 @@ public interface CourseService {
 
     ServerResponse getAllCourseByPage(int pageNum, int pageSize);
 
-    ServerResponse searchByName(String keyword, int pageNum, int pageSize);
+    ServerResponse searchCourse(Long userId, String keyword, int action, int tab, int pageNum, int pageSize);
 
     ServerResponse getCourseInfo(String courseName);
 
     ServerResponse getCourseInfoById(String courseId);
+
+    ServerResponse getUnchosenCourse(Long studentId, int pageNum, int pageSize);
 }

@@ -30,10 +30,10 @@ public class GroupController {
     @RequestMapping(value = "create.do", method = RequestMethod.POST)
     @ResponseBody
     @CrossOrigin
-    public ServerResponse<Group> createGroup(HttpSession session, GroupVO group) {
+    public ServerResponse<GroupVO> createGroup(HttpSession session, String courseId) {
         UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
         if(currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
-        return groupService.createGroup(group);
+        return groupService.createGroup(currentUser.getId(), courseId);
     }
 
     @RequestMapping(value = "add_member.do", method = RequestMethod.POST)
@@ -52,14 +52,58 @@ public class GroupController {
         return groupService.getGroupInfo(currentUser.getId(), courseId);
     }
 
-//    @RequestMapping(value = "student/get_group_info.do", method = RequestMethod.POST)
-//    @ResponseBody
-//    @CrossOrigin
-//    //学生查询小组信息
-//    public ServerResponse getGroupInfoForStudent(HttpSession session, Long groupId) {
-//        UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
-//        if(currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
-//        return groupService.stuGetGroupInfo(currentUser.getId(), groupId);
-//    }
+    @RequestMapping(value = "expire_group.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse expireGroup(HttpSession session, String courseId) {
+        UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
+        if(currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        return groupService.expire_group(currentUser.getId(), courseId);
+    }
+
+    @RequestMapping(value = "exit_group.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse exit_group(HttpSession session, String courseId) {
+        UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
+        if(currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        return groupService.exit_group(currentUser.getId(), courseId);
+    }
+
+    @RequestMapping(value = "get_all_group.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse get_all_group(HttpSession session, String courseId) {
+        UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
+        if(currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        return groupService.get_all_group(courseId);
+    }
+
+    @RequestMapping (value = "join_group.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse join_group(HttpSession session, Long groupId) {
+        UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        return groupService.join_group(currentUser.getId(), groupId);
+    }
+
+    @RequestMapping (value = "assign_captain.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse assign_captain(HttpSession session, String courseId, String studentName) {
+        UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        return groupService.assignCaptain(currentUser.getName(), courseId, studentName);
+    }
+
+    @RequestMapping (value = "del_member.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse delMember(HttpSession session, String courseId, String studentName) {
+        UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        return groupService.delMember(courseId, studentName);
+    }
 
 }

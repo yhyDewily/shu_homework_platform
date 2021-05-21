@@ -10,5 +10,6 @@ public class CourseVO {
     private String teacher;
     private String major;
     private String stopTime;
+    private String intro;
 
 }

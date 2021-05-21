@@ -3,12 +3,10 @@ package com.shu.homework.controller;
 import com.shu.homework.common.Const;
 import com.shu.homework.common.ServerResponse;
 import com.shu.homework.entity.Course;
-import com.shu.homework.entity.User;
 import com.shu.homework.service.Impl.CourseServiceImpl;
 import com.shu.homework.service.Impl.UserServiceImpl;
 import com.shu.homework.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,11 +48,10 @@ public class CourseController {
     @RequestMapping(value = "add_stu_course.do", method = RequestMethod.POST)
     @ResponseBody
     @CrossOrigin
-    public ServerResponse addStuCourse(HttpSession session, User user, String courseId){
+    public ServerResponse addStuCourse(HttpSession session, String courseId){
         UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
-        if (!currentUser.getId().equals(user.getId()) && currentUser.getRole() < 1) return ServerResponse.createByErrorMessage("不可替其他同学添加课程");
-        return courseService.addStuCourse(user.getId(), courseId);
+        return courseService.addStuCourse(currentUser.getId(), courseId);
     }
 
     @RequestMapping(value = "get_student_course.do", method = RequestMethod.POST)
@@ -81,12 +78,24 @@ public class CourseController {
         }
     }
 
-    @RequestMapping(value = "search_by_name.do", method = RequestMethod.POST)
+    @RequestMapping(value = "search_course.do", method = RequestMethod.POST)
     @ResponseBody
     @CrossOrigin
-    public ServerResponse searchByName(String keyword, @RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+    public ServerResponse searchCourse(HttpSession session, String keyword, int action, int tab, @RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
                                        @RequestParam(value = "pageSize", defaultValue = "5")int pageSize) {
-        return courseService.searchByName(keyword, pageNum, pageSize);
+        UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        return courseService.searchCourse(currentUser.getId(), keyword, action,tab, pageNum-1, pageSize);
+    }
+
+    @RequestMapping(value = "get_unchosen_course.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse getUnchosenCourse (HttpSession session, @RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+                                             @RequestParam(value = "pageSize", defaultValue = "5")int pageSize) {
+        UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        return courseService.getUnchosenCourse(currentUser.getId(), pageNum-1, pageSize);
     }
 
 }
