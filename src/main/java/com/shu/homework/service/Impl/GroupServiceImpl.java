@@ -67,6 +67,14 @@ public class GroupServiceImpl implements GroupService {
         return ServerResponse.createBySuccess("添加成功", group);
     }
 
+    @Override
+    public ServerResponse getGroupInfo(Long studentId, String courseId) {
+        User user = userRepository.findByUserId(studentId);
+        Group group = groupRepository.getGroupByMemberAndCourseId(user.getName(), courseId);
+        return null;
+    }
+
+
 //    @Override
 //    public ServerResponse stuGetGroupInfo(Long studentId, Long groupId) {
 //        Group group = groupRepository.getById(groupId);

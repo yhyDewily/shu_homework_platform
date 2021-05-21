@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.23, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: ems
 -- ------------------------------------------------------
--- Server version	8.0.23
+-- Server version	8.0.19
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -56,7 +56,7 @@ CREATE TABLE `course` (
   `stopTime` date NOT NULL,
   `intro` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,8 +65,37 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
-INSERT INTO `course` VALUES (1,'08305008','数据结构','计算机工程与科学',3,'2021-06-30',NULL),(2,'08305011','计算机组成原理','计算机工程与科学',3,'2021-06-30',NULL),(3,'08305072','离散数学','计算机工程与科学',5,'2021-06-30',NULL),(4,'08305138','编译原理','计算机工程与科学',8,'2021-06-30',NULL),(5,'0P0000005','概率论','理学院',6,'2021-11-30',NULL);
+INSERT INTO `course` VALUES (1,'08305008','数据结构','计算机工程与科学学院',3,'2021-06-30',NULL),(2,'08305011','计算机组成原理','计算机工程与科学学院',3,'2021-06-30',NULL),(3,'08305072','离散数学','计算机工程与科学学院',5,'2021-06-30',NULL),(4,'08305138','编译原理','计算机工程与科学学院',8,'2021-06-30',NULL),(5,'0P000005','概率论','理学院',6,'2021-11-30',NULL),(6,'3ZS081005','嵌入式系统开发技术','计算机工程与科学学院',5,'2021-06-30',NULL);
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `group`
+--
+
+DROP TABLE IF EXISTS `group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `group` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `size` int NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `captain` varchar(45) NOT NULL,
+  `member` text NOT NULL,
+  `courseId` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `group`
+--
+
+LOCK TABLES `group` WRITE;
+/*!40000 ALTER TABLE `group` DISABLE KEYS */;
+INSERT INTO `group` VALUES (1,2,'第1组','lyh','lyh;lilin','00001');
+/*!40000 ALTER TABLE `group` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -226,7 +255,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'刘谕鸿','1016886553@qq.com','F1759176858D0D46D7B6C3276FE828D6',0),(2,'李林','1111@qq.com','E10ADC3949BA59ABBE56E057F20F883E',0),(3,'曹旻','123456@qq.com','E10ADC3949BA59ABBE56E057F20F883E',1),(4,'钟保琪','456789@qq.com','E80B5017098950FC58AAD83C8C14978E',0),(5,'陈圣波','123abc@qq.com','E80B5017098950FC58AAD83C8C14978E',1),(6,'雷州','345abc@qq.com','E10ADC3949BA59ABBE56E057F20F883E',1),(7,'dewily','yhy16121755@gmail.com','7066FE51342F77B4C37F96E74C6D22BC',2),(8,'骆祥峰','luo123@shu.edu.cn','E80B5017098950FC58AAD83C8C14978E',1),(9,'张涛','zhang@shu.edu.cn','E10ADC3949BA59ABBE56E057F20F883E',0),(10,'崔毅','cuiyi@qq.com','E10ADC3949BA59ABBE56E057F20F883E',0),(11,'ss','sss','sss',1);
+INSERT INTO `user` VALUES (1,'刘谕鸿','1016886553@qq.com','F1759176858D0D46D7B6C3276FE828D6',0),(2,'李林','1111@qq.com','E10ADC3949BA59ABBE56E057F20F883E',0),(3,'曹旻','123456@qq.com','E10ADC3949BA59ABBE56E057F20F883E',1),(4,'钟保琪','456789@qq.com','E80B5017098950FC58AAD83C8C14978E',0),(5,'陈圣波','123abc@qq.com','E80B5017098950FC58AAD83C8C14978E',1),(6,'雷州','345abc@qq.com','E10ADC3949BA59ABBE56E057F20F883E',1),(7,'dewily','yhy16121755@gmail.com','7066FE51342F77B4C37F96E74C6D22BC',2),(8,'骆祥峰','luo123@shu.edu.cn','E80B5017098950FC58AAD83C8C14978E',1),(9,'张涛','zhang@shu.edu.cn','E10ADC3949BA59ABBE56E057F20F883E',0),(10,'崔毅','cuiyi@qq.com','E10ADC3949BA59ABBE56E057F20F883E',0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -239,4 +268,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-21  1:40:14
+-- Dump completed on 2021-05-21 12:27:57

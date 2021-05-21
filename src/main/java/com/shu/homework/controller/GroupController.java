@@ -43,6 +43,15 @@ public class GroupController {
         return groupService.addMember(studentName, groupId, courseId);
     }
 
+    @RequestMapping(value = "get_group_info.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse getGroupInfo(HttpSession session, String courseId) {
+        UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
+        if(currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        return groupService.getGroupInfo(currentUser.getId(), courseId);
+    }
+
 //    @RequestMapping(value = "student/get_group_info.do", method = RequestMethod.POST)
 //    @ResponseBody
 //    @CrossOrigin

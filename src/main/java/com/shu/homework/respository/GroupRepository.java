@@ -12,4 +12,6 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     //@Query(value = "select * from ems.student_group where id=?1", nativeQuery = true)
     Group getById(Long id);
 
+    @Query(value = "select * from ems.group where memmber regexp'?1'", nativeQuery = true)
+    Group getGroupByMemberAndCourseId(String member, String courseId);
 }

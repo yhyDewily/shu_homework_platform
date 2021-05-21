@@ -10,5 +10,8 @@ public interface GroupService {
 
     ServerResponse addMember(String studentName, Long groupId, String courseId);
 
+    ServerResponse getGroupInfo(Long studentId, String courseId);
+
+
     //ServerResponse stuGetGroupInfo(Long studentId, Long groupId);
 }

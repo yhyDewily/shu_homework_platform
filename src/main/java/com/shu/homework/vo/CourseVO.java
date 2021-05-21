@@ -3,7 +3,7 @@ package com.shu.homework.vo;
 import lombok.Data;
 
 @Data
-public class SCourseVO {
+public class CourseVO {
 
     private String courseId;
     private String courseName;
