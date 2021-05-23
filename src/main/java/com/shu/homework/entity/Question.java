@@ -3,6 +3,7 @@ package com.shu.homework.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Data
 @Entity
@@ -17,5 +18,6 @@ public class Question {
     private String content;
     private String creator;
     private Integer commentCount;
+    private Date time;
 
 }

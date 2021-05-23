@@ -31,7 +31,6 @@ public class UserController {
         HttpSession session = servlet.getSession();
         if(response.isSuccess()) {
             session.setAttribute(Const.CURRENT_USER, response.getData());
-            System.out.println(session.getId());
         }
         return response;
     }
@@ -58,7 +57,6 @@ public class UserController {
     @CrossOrigin
     public ServerResponse<UserVO> getUserInfo(HttpServletRequest servlet) {
         HttpSession session = servlet.getSession();
-        System.out.println(session.getId());
         UserVO currentUserVO = (UserVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUserVO == null) {
            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "未登录，需要强制登录");
