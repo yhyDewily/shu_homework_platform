@@ -1,5 +1,7 @@
 package com.shu.homework.util;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,11 +12,6 @@ public class test {
 
     public static void main(String args[]) {
 //        System.out.println(MD5Util.MD5EncodeUtf8("dewily"));
-        List<String> strings = new ArrayList<>();
-        strings.add("刘谕鸿");
-        strings.add("李林");
-        strings.add("张涛");
-        strings.removeIf(s -> s.equals("刘谕鸿"));
-        System.out.println(strings);
+        System.out.println("00"+RandomStringUtils.randomAlphanumeric(6).toUpperCase());
     }
 }

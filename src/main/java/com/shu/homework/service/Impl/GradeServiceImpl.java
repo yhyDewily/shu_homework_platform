@@ -3,9 +3,11 @@ package com.shu.homework.service.Impl;
 import com.shu.homework.common.ServerResponse;
 import com.shu.homework.entity.Course;
 import com.shu.homework.entity.CourseGrade;
+import com.shu.homework.entity.User;
 import com.shu.homework.respository.CourseGradeRepository;
 import com.shu.homework.respository.CourseRationRepository;
 import com.shu.homework.respository.CourseRepository;
+import com.shu.homework.respository.UserRepository;
 import com.shu.homework.service.GradeService;
 import com.shu.homework.vo.StuGradeVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,10 @@ public class GradeServiceImpl implements GradeService {
 
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
 
     /**** 教师功能 ****/
     // 录入成绩
@@ -132,5 +138,28 @@ public class GradeServiceImpl implements GradeService {
             return ServerResponse.createByErrorMessage("数据库错误，获取失败");
         }
 
+    }
+
+    @Override
+    public ServerResponse getAllGrade(String courseId) {
+        List<StuGradeVO> stuGradeVOS = new ArrayList<>();
+        List<CourseGrade> courseGrades = gradeRepository.findAllByCourseId(courseId);
+        for(CourseGrade grade: courseGrades) {
+            StuGradeVO stuGrade = new StuGradeVO();
+            User user = userRepository.findByUserId(Long.valueOf(grade.getStudentId()));
+            stuGrade.setStudentId(grade.getStudentId());
+            stuGrade.setCourseId(grade.getCourseId());
+            stuGrade.setUsualGrade(grade.getUsual());
+            stuGrade.setExamGrade(grade.getExam());
+            stuGrade.setStudentName(user.getName());
+            Course course = courseRepository.findByCourseId(grade.getCourseId());
+            stuGrade.setCourseName(course.getCourseName());
+            //整合成绩
+            int ratio = rationRepository.getCourseRatioByCourseId(grade.getCourseId());
+            double finalGrade = grade.getUsual() * ratio / 100  + grade.getExam() * (100-ratio) / 100;
+            stuGrade.setFinalGrade(finalGrade);
+            stuGradeVOS.add(stuGrade);
+        }
+        return ServerResponse.createBySuccess(stuGradeVOS);
     }
 }

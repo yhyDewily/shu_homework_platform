@@ -119,22 +119,18 @@ public class ForumServiceImpl implements ForumService {
         if(question == null){
             return ServerResponse.createByErrorMessage("问题不存在，删除失败");
         }
-        if(creator.equals(question.getCreator())){ //是本人发布的问题
-            try{
-                questionRepository.delete(question);
-                // 删除该问题下的所有评论
-                List<Comment> commentList = commentRepository.getCommentsByParentId(id);
-                for(Comment comment:commentList){
-                    commentRepository.delete(comment);
-                }
-                return ServerResponse.createBySuccessMessage("删除成功");
-            } catch (Exception e){
-                e.printStackTrace();
-                return ServerResponse.createByErrorMessage("删除失败");
+        try{
+            questionRepository.delete(question);
+            // 删除该问题下的所有评论
+            List<Comment> commentList = commentRepository.getCommentsByParentId(id);
+            for(Comment comment:commentList){
+                commentRepository.delete(comment);
             }
-
+            return ServerResponse.createBySuccessMessage("删除成功");
+        } catch (Exception e){
+            e.printStackTrace();
+            return ServerResponse.createByErrorMessage("删除失败");
         }
-        return ServerResponse.createByErrorMessage("删除失败");
     }
 
     @Override
@@ -160,6 +156,9 @@ public class ForumServiceImpl implements ForumService {
     @Override
     public ServerResponse submitAnswer(Long id, Long questionId, String content) {
         Comment comment = new Comment();
+        Question question = questionRepository.getOne(questionId);
+        int count = question.getCommentCount();
+        question.setCommentCount(question.getCommentCount()+1);
         String creator = userRepository.findByUserId(id).getName();
         comment.setParentId(0L);
         comment.setCommentator(creator);

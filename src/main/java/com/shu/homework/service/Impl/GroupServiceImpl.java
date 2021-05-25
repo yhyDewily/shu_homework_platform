@@ -245,7 +245,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public ServerResponse delMember(String courseId, String studentName) {
+    public ServerResponse delMemeber(String courseId, String studentName) {
         Group group = groupRepository.getGroupByMemberAndCourseId(studentName, courseId);
         List<String> groupMember = new ArrayList<>(Arrays.asList(group.getMember().split(";")));
         groupMember.removeIf( s->s.equals(studentName));
@@ -266,6 +266,17 @@ public class GroupServiceImpl implements GroupService {
             return ServerResponse.createByErrorMessage("删除失败");
         }
         return ServerResponse.createBySuccessMessage("删除成功");
+    }
+
+    @Override
+    public ServerResponse teacher_expire_group(Long groupId) {
+        Group group = groupRepository.getById(groupId);
+        try {
+            groupRepository.delete(group);
+        } catch (Exception e) {
+            return ServerResponse.createByErrorMessage("解散失败");
+        }
+        return ServerResponse.createBySuccessMessage("解散成功");
     }
 
 

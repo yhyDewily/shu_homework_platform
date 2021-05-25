@@ -44,6 +44,16 @@ public class CourseController {
         return courseService.getCourseInfoById(courseId);
     }
 
+    @RequestMapping(value = "get_course_info_by_teacher.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse getCourseInfoByTeacher (HttpSession session, @RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+                                                  @RequestParam(value = "pageSize", defaultValue = "5")int pageSize) {
+        UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
+        if(currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        return courseService.getCourseInfoByTeacher(currentUser.getId(), pageNum-1, pageSize);
+    }
+
 
     @RequestMapping(value = "add_stu_course.do", method = RequestMethod.POST)
     @ResponseBody
@@ -98,4 +108,13 @@ public class CourseController {
         return courseService.getUnchosenCourse(currentUser.getId(), pageNum-1, pageSize);
     }
 
+    @RequestMapping(value = "submit_course.do", method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse createCourse(HttpSession session, Course course) {
+        UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        course.setT_id(currentUser.getId());
+        return courseService.createCourse(course);
+    }
 }

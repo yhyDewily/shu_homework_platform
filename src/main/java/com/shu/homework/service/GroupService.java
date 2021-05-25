@@ -24,7 +24,9 @@ public interface GroupService {
 
     ServerResponse assignCaptain(String name, String courseId, String studentName);
 
-    ServerResponse delMember(String courseId, String studentName);
+    ServerResponse delMemeber(String courseId, String studentName);
+
+    ServerResponse teacher_expire_group(Long groupId);
 
 
     //ServerResponse stuGetGroupInfo(Long studentId, Long groupId);

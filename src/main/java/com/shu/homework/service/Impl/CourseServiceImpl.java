@@ -2,13 +2,16 @@ package com.shu.homework.service.Impl;
 
 import com.shu.homework.common.ServerResponse;
 import com.shu.homework.entity.Course;
+import com.shu.homework.entity.CourseGrade;
 import com.shu.homework.entity.SCourse;
 import com.shu.homework.entity.User;
+import com.shu.homework.respository.CourseGradeRepository;
 import com.shu.homework.respository.CourseRepository;
 import com.shu.homework.respository.SCourseRepository;
 import com.shu.homework.respository.UserRepository;
 import com.shu.homework.service.CourseService;
 import com.shu.homework.vo.CourseVO;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -17,7 +20,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -32,6 +37,9 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     SCourseRepository sCourseRepository;
 
+    @Autowired
+    CourseGradeRepository gradeRepository;
+
     @Override
     public ServerResponse addStuCourse(Long studentId, String courseId) {
         if(courseRepository.checkCourseId(courseId) < 1)
@@ -40,6 +48,9 @@ public class CourseServiceImpl implements CourseService {
             return ServerResponse.createByErrorMessage("该课程已选");
         }
         SCourse sCourse = new SCourse();
+        CourseGrade grade = new CourseGrade();
+        grade.setCourseId(courseId);
+        grade.setStudentId(studentId.toString());
         sCourse.setCourseId(courseId);
         sCourse.setStudentId(studentId);
         sCourse.setStatus("no");
@@ -147,6 +158,7 @@ public class CourseServiceImpl implements CourseService {
         if(course == null) return ServerResponse.createByErrorMessage("课程不存在");
         String teacher = userRepository.findByUserId(course.getT_id()).getName();
         CourseVO courseVO = new CourseVO();
+        courseVO.setTeacherId(course.getT_id().toString());
         courseVO.setCourseId(courseId);
         courseVO.setCourseName(course.getCourseName());
         courseVO.setMajor(course.getMajor());
@@ -170,6 +182,40 @@ public class CourseServiceImpl implements CourseService {
         //获取学生所有课程后返回
         Page<CourseVO> pageCourse = new PageImpl<CourseVO>(courseList,pageable,courses.getTotalElements());
         return ServerResponse.createBySuccess(pageCourse);
+    }
+
+    @Override
+    public ServerResponse getCourseInfoByTeacher(Long userId, int pageNum, int pageSize) {
+        User user = userRepository.findByUserId(userId);
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        Page<Course> courses = courseRepository.findAllByTId(userId, pageable);
+        List<Course> coursesContent = courses.getContent();
+        List<CourseVO> courseList = new ArrayList<>();
+        for(Course course_it : coursesContent) {
+            CourseVO courseVO = setCourseVO(course_it);
+            courseList.add(courseVO);
+        }
+        //获取学生所有课程后返回
+        Page<CourseVO> pageCourse = new PageImpl<CourseVO>(courseList,pageable,courses.getTotalElements());
+        return ServerResponse.createBySuccess(pageCourse);
+    }
+
+    @Override
+    public ServerResponse createCourse(Course course) {
+        //新建课程号
+        String courseId = "0" + RandomStringUtils.randomNumeric(7);
+        List<String> courseList = courseRepository.findAllCourseId();
+        Set<String> courses = new HashSet<>(courseList);
+        while (courses.contains(courseId)) {
+            courseId = "0" + RandomStringUtils.randomNumeric(7);
+        }
+        course.setCourseId(courseId);
+        try {
+            courseRepository.save(course);
+        } catch (Exception e) {
+            return ServerResponse.createByErrorMessage("新建课程失败");
+        }
+        return ServerResponse.createBySuccess("创建课程成功");
     }
 
     public boolean checkAuth(Long teacherId, String courseId){

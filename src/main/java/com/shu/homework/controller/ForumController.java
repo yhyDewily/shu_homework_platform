@@ -97,7 +97,7 @@ public class ForumController {
     // 删除自己发布的问题
     @RequestMapping(value = "delete_question", method = RequestMethod.POST)
     @CrossOrigin
-    public ServerResponse deleteQuestion(Long id, HttpSession session){
+    public ServerResponse deleteQuestion(HttpSession session, Long id){
         String creator = session.getAttribute(Const.CURRENT_USER).toString();
         if(creator == null){ //未登录
             return ServerResponse.createByErrorMessage("请先登录");

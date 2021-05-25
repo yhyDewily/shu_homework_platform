@@ -8,6 +8,7 @@ public class StuGradeVO {
     private String courseId;
     private String courseName;
     private String studentId;
+    private String studentName;
     private double usualGrade;
     private double examGrade;
     private double finalGrade;

@@ -72,6 +72,13 @@ public class GradeController {
 
     }
 
+    @RequestMapping(value = "get_all_stu_grade", method = RequestMethod.POST)
+    @CrossOrigin
+    public ServerResponse getAllStuGrade(HttpSession session, String courseId) {
+        UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
+        if(currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        return gradeService.getAllGrade(courseId);
+    }
 
     /**** 学生功能 ****/
 

@@ -2,7 +2,6 @@ package com.shu.homework.controller;
 
 import com.shu.homework.common.Const;
 import com.shu.homework.common.ServerResponse;
-import com.shu.homework.entity.Group;
 import com.shu.homework.service.Impl.GroupServiceImpl;
 import com.shu.homework.service.Impl.UserServiceImpl;
 import com.shu.homework.vo.GroupVO;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 @RequestMapping("/group/")
@@ -61,6 +59,15 @@ public class GroupController {
         return groupService.expire_group(currentUser.getId(), courseId);
     }
 
+    @RequestMapping(value = "teacher_expire_group.do",method = RequestMethod.POST)
+    @ResponseBody
+    @CrossOrigin
+    public ServerResponse teacherExpireGroup(HttpSession session, Long groupId) {
+        UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
+        return groupService.teacher_expire_group(groupId);
+    }
+
     @RequestMapping(value = "exit_group.do", method = RequestMethod.POST)
     @ResponseBody
     @CrossOrigin
@@ -103,7 +110,6 @@ public class GroupController {
     public ServerResponse delMember(HttpSession session, String courseId, String studentName) {
         UserVO currentUser = (UserVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) return ServerResponse.createByErrorMessage("用户未登录");
-        return groupService.delMember(courseId, studentName);
+        return groupService.delMemeber(courseId, studentName);
     }
-
 }

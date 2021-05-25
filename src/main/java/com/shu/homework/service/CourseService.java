@@ -21,4 +21,8 @@ public interface CourseService {
     ServerResponse getCourseInfoById(String courseId);
 
     ServerResponse getUnchosenCourse(Long studentId, int pageNum, int pageSize);
+
+    ServerResponse getCourseInfoByTeacher(Long userId, int pageNum, int pageSize);
+
+    ServerResponse createCourse(Course course);
 }

@@ -21,4 +21,6 @@ public interface GradeService {
     public ServerResponse getGradesList(String studentId);
     // 查询个人单科成绩
     public ServerResponse getGrade(String studentId, String courseId);
+
+    ServerResponse getAllGrade(String courseId);
 }
