@@ -7,4 +7,5 @@
 
 数据库账户注意在application.yml里面进行修改
 
+在common.const里注意修改下文件上传下载的路径
 
